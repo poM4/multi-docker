@@ -1,0 +1,16 @@
+sudo: required
+services:
+    - docker
+
+before_install:
+    - docker build -t pom4/react-test -f ./client/Dockerfile.dev ./client
+
+
+script:
+    - docker run pom4/react-test npm test -- --coverage
+
+after_success:
+    docker build -t pom4/multi-client ./client
+    docker build -t pom4/mulit-nginx ./nginx
+    docker build -t pom4/mulit-server ./server
+    docker build -t pom4/mulit-worker ./worker
