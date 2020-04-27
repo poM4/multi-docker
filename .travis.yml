@@ -10,7 +10,14 @@ script:
     - docker run pom4/react-test npm test -- --coverage
 
 after_success:
-    docker build -t pom4/multi-client ./client
-    docker build -t pom4/mulit-nginx ./nginx
-    docker build -t pom4/mulit-server ./server
-    docker build -t pom4/mulit-worker ./worker
+    - docker build -t pom4/multi-client ./client
+    - docker build -t pom4/multi-nginx ./nginx
+    - docker build -t pom4/multi-server ./server
+    - docker build -t pom4/multi-worker ./worker
+
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+
+    - docker push pom4/multi-client
+    - docker push pom4/multi-nginx
+    - docker push pom4/multi-server
+    - docker push pom4/multi-worker
